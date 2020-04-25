@@ -8,3 +8,6 @@ Create virtualenv for window:
 
 Creating requirements.txt:
 1)pip freeze > reuqirement.txt
+
+How to start:
+1) python app.py
