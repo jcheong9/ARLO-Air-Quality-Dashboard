@@ -1,5 +1,7 @@
 # ARLO-Air-Quality-API
 
+python version 3.8.2
+
 Create virtualenv for window:
 1) install virtualenv and pip
 2) virtualenv venv

@@ -23,5 +23,9 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 def home():
     return "<p>Hello World main page<p>"
 
+@app.route("/page")
+def page():
+    return "<p>Hello World page!~~<p>"
+
 if __name__ == '__main__':
     app.run()
