@@ -12,7 +12,8 @@ Creating requirements.txt:
 1)pip freeze > reuqirement.txt
 
 How to start:
-1) python app.py
+1) cd server
+2) python app.py
 
 --Client--
 How to start:
