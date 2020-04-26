@@ -2,6 +2,7 @@
 
 python version 3.8.2
 
+--Server--
 Create virtualenv for window:
 1) install virtualenv and pip
 2) virtualenv venv
@@ -12,4 +13,11 @@ Creating requirements.txt:
 1)pip freeze > reuqirement.txt
 
 How to start:
-1) python app.py
+1) cd server
+2) python app.py
+
+--Client--
+How to start:
+1) cd client
+2) cd my-app
+3) npm start
