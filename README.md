@@ -1,5 +1,7 @@
 # ARLO-Air-Quality-API
 
+--Server--
+
 Create virtualenv for window:
 1) install virtualenv and pip
 2) virtualenv venv
@@ -11,3 +13,9 @@ Creating requirements.txt:
 
 How to start:
 1) python app.py
+
+--Client--
+How to start:
+1) cd client
+2) cd my-app
+3) npm start
