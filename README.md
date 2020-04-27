@@ -10,7 +10,10 @@ Create virtualenv for window:
 4) pip install -r requirements.txt
 
 Creating requirements.txt:
-1)pip freeze > reuqirement.txt
+1)pip freeze > requirements.txt
+
+Remove all requirements.txt:
+1)pip uninstall -r requirements.txt -y
 
 How to start:
 1) cd server
