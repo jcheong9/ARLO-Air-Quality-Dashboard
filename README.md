@@ -21,3 +21,8 @@ How to start:
 1) cd client
 2) cd my-app
 3) npm start
+
+--Database--
+1) cd server
+2) venv\Scripts\activate
+3) python db.py
