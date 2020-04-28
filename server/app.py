@@ -60,11 +60,9 @@ def token_required(f):
 
 # class file should be in different file
 class Test_object(db.Model):
-    __tablename__ = 'message'
-    convid = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(1024))
-    timestamp = db.Column(db.DateTime)
-    senderid = db.Column(db.Integer)
+    __tablename__ = 'test'
+    name = db.Column(db.String, primary_key=True)
+    email = db.Column(db.String)
 
     
 
@@ -77,10 +75,8 @@ def test_obj():
     output = []
     for i in testdata:
         obj = {}
-        obj['convid'] = i.convid
-        obj['content'] = i.content
-        obj['timestamp'] = i.timestamp
-        obj['senderid'] = i.senderid
+        obj['name'] = i.name
+        obj['email'] = i.name
         output.append(obj)
     return jsonify({'test_data': output})
 
@@ -89,7 +85,7 @@ def test_obj():
 def add_test_obj():
 
     data = request.get_json()
-    new_entry = Test_object(convid=data['convid'], content=data['content'], timestamp=data['timestamp'],senderid=data['senderid'])
+    new_entry = Test_object(name=data['name'], email=data['email'])
     # convid = request.json['convid']
     # content = request.json['content']
     # timestamp = request.json['timestamp']
