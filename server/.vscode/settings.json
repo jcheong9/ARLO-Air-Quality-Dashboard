@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "C:\\code\\ARLO-Air-Quality-API\\venv\\Scripts\\python.exe",
+    "python.linting.pylintArgs": ["--load-plugins", "pylint-flask"]
+}
