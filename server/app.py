@@ -59,10 +59,10 @@ def token_required(f):
 
 
 # class file should be in different file
-class Test_object(db.Model):
+class Test(db.Model):
     __tablename__ = 'test'
-    name = db.Column(db.String, primary_key=True)
-    email = db.Column(db.String)
+    name = db.Column(db.String(100), primary_key=True)
+    email = db.Column(db.String(100))
 
     
 
@@ -71,7 +71,7 @@ class Test_object(db.Model):
 
 @app.route("/test_obj", methods=['GET'])
 def test_obj():
-    testdata = Test_object.query.all()
+    testdata = Test.query.all()
     output = []
     for i in testdata:
         obj = {}
@@ -85,7 +85,7 @@ def test_obj():
 def add_test_obj():
 
     data = request.get_json()
-    new_entry = Test_object(name=data['name'], email=data['email'])
+    new_entry = Test(name=data['name'], email=data['email'])
     # convid = request.json['convid']
     # content = request.json['content']
     # timestamp = request.json['timestamp']
@@ -98,7 +98,7 @@ def add_test_obj():
     db.session.add(new_entry)
     db.session.commit()
 
-    return jsonify(new_entry)
+    return jsonify({'msg':'created'})
 
 
 # ## Create records_test object

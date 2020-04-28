@@ -24,7 +24,7 @@
     }
   ],
   "paths": {
-    "/request": {
+    "/test_obj": {
       "get": {
         "tags": [
           "dummy get request"
