@@ -7,8 +7,8 @@ from functools import wraps
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisissecret'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/postgres'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Zh6Q6C97@database-issp-air-quality-instance.cmamvcvbojfv.us-west-2.rds.amazonaws.com/airQualityApiDb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/postgres'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Zh6Q6C97@database-issp-air-quality-instance.cmamvcvbojfv.us-west-2.rds.amazonaws.com/airQualityApiDb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -68,6 +68,14 @@ def artistFun():
         art_data['imageurl'] = art.imageurl
         output.append(art_data)
     return jsonify({'artists' : output})
+
+@app.route("/addart", methods=['POST'])
+def artistAdd():
+    data = request.get_json()
+    new_user = artist( name=data['name'], about=data['about'], imageurl=data['imageurl'])
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message' : 'New user created!'})
 
 @app.route('/unprotected')
 def unprotected():
