@@ -1,4 +1,4 @@
-# ARLO-Air-Quality-API
+# ARLO-Air-Quality-Dashboard
 
 python version 3.8.2
 
