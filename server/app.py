@@ -17,6 +17,9 @@ app.config['SECRET_KEY'] = 'thisissecret'
 
 # 'postgresql://username:password@hostname/database'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hceigsjprcvgqh:e92da4353d4ee7c91de8d35e7279c3048b4bc1bab6bbc5dc854a2e0a12f4d933@ec2-23-22-156-110.compute-1.amazonaws.com/dbjr6ju1135sb7'
+
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/postgres'
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Zh6Q6C97@database-issp-air-quality-instance.cmamvcvbojfv.us-west-2.rds.amazonaws.com/airQualityApiDb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -149,6 +152,14 @@ def get():
 def page():
     return "<p>Hello World page!~~<p>"
 
+
+@app.route("/addart", methods=['POST'])
+def artistAdd():
+    data = request.get_json()
+    new_user = artist( name=data['name'], about=data['about'], imageurl=data['imageurl'])
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message' : 'New user created!'})
 
 @app.route('/unprotected')
 def unprotected():
