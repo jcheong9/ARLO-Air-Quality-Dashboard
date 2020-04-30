@@ -7,34 +7,34 @@ import ReactFrappeChart from "react-frappe-charts";
 const LineGraph = ({ data }) => {
     let convertDate = moment(data.timestamp).format('YYYY/MM/DD')
     let labelArr = [];
-    // data.array.forEach(dt => {
-    //     labelArr.push(dt.records_test_data.co2)
-    // });
+    console.log(data);
     
+
     return (
-        <div class="charts">
-                <ReactFrappeChart
-                    type="line"
-                    colors={["#21ba45"]}
-                    axisOptions={{ xAxisMode: "tick", yAxisMode: "tick", xIsSeries: 1 }}
-                    height={250}
-                    data={{
-                        labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-                        datasets: [
-                            {
-                                name: "CO2",
-                                values: [18, 40, 30, 35, 8, 52, 17, 4],
-                                chartType: 'line'
-                            },
-                            {
-                                name: "VOC",
-                                values: [40, 40, 40, 40, 40, 40, 40, 20],
-                                chartType: 'line'
-                            }
-                        ]
-                    }}
-                />
-           
+        <div className="charts">
+              
+            <ReactFrappeChart
+                type="line"
+                colors={["#21ba45"]}
+                axisOptions={{ xAxisMode: "tick", yAxisMode: "tick", xIsSeries: 1 }}
+                height={250}
+                data={{
+                    labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                    datasets: [
+                        {
+                            name: "CO2",
+                            values: [18, 40, 30, 35, 8, 52, 17, 4],
+                            chartType: 'line'
+                        },
+                        {
+                            name: "VOC",
+                            values: [40, 40, 40, 40, 40, 40, 40, 20],
+                            chartType: 'line'
+                        }
+                    ]
+                }}
+            />
+
         </div>
 
     );
