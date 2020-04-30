@@ -12,7 +12,8 @@ class App extends Component {
             dataByDevice: [],
             startDate: new Date(),
             endDate: new Date(),
-            device: "1"
+            device: "1",
+            isSubmitted:false
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -23,25 +24,27 @@ class App extends Component {
 
     //SEND POST REQUEST
     handleSubmit(event) {
+        
         alert("device_id: "+ this.state.device + "\n" +
-                "timeStart: "+moment(this.state.startDate).format('YYYY/MM/DD') +"\n"+
-                "timeEnd: "+moment(this.state.endDate).format('YYYY/MM/DD'));
-
-        fetch('http://jsonplaceholder.typicode.com/users', {
+                "timeStart: "+moment(this.state.startDate).format('YYYY-MM-DD') + "\n"+
+                "timeEnd: "+moment(this.state.endDate).format('YYYY-MM-DD'));
+                
+        fetch('http://localhost:5000/records_test', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "device_id": this.state.device,
-                "timeStart": moment(this.state.startDate).format('YYYY/MM/DD'),
-                "timeEnd": moment(this.state.endDate).format('YYYY/MM/DD')
+                "timeStart": moment(this.state.startDate).format('YYYY-MM-DD'),
+                "timeEnd": moment(this.state.endDate).format('YYYY-MM-DD')
             })
         })
             .then(res => res.json())
             .then((data) => {
-                this.setState({ dataByDevice: data })
+                this.setState({ dataByDevice: data });
+                this.setState({ isSubmitted: true});
             })
             .catch(console.log)
-        event.preventDefault();
+     
     }
 
     changeStartDate = (event) => {
@@ -58,18 +61,13 @@ class App extends Component {
     }
 
 
-    // componentDidMount() {
-    //This is for fetch something on initial loading of component
-    // }
-
-
-
-
+    //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
+        
         return (
             <div>
                 <Header />
-                <form onSubmit={this.handleSubmit}>
+                <form>
                     <label>
                         Pick a device:
                         <select onChange={this.changeDevice} value={this.state.selectDevice}>
@@ -91,10 +89,10 @@ class App extends Component {
                         selected={this.state.endDate}
                         onChange={this.changeEndDate}
                     />
-                    <input type="submit" value="Submit" />
+                    <input type="button" onClick={this.handleSubmit} value="Submit" />
                 </form>
 
-                <LineGraph data={this.state.dataByDevice} />
+                {this.state.isSubmitted && <LineGraph data={this.state.dataByDevice} />}
             </div>
         );
     }
