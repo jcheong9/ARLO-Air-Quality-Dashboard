@@ -61,7 +61,7 @@ class App extends Component {
     }
 
 
-    
+    //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
         
         return (
