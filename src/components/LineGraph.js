@@ -7,27 +7,38 @@ import ReactFrappeChart from "react-frappe-charts";
 const LineGraph = ({ data }) => {
 
     let dataArr = [];
-    let co2Arr = [];
     let timeArr = [];
-    let humidityArr = [];
-    let tempArr = [];
-    let tvocArr = [];
+
+    let datasetsArr = [];
     let st = data.records_test_data;
     for (var o in st) {
         dataArr.push(st[o]);
     }
 
-    for (var o in dataArr) {
-        let convertDate = moment(dataArr[o].timestamp).format('YYYY/MM/DD');
-        co2Arr.push(dataArr[o].co2);
+    for (let s = 0; s < st.length; s++) {
+        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD');
         timeArr.push(convertDate);
-        humidityArr.push(dataArr[o].humidity);
-        tempArr.push(dataArr[o].temp);
-        tvocArr.push(dataArr[o].tvoc);
     }
-    console.log(co2Arr);
-    console.log(humidityArr);
-    //TODO: improve null array checking. without this, when data is empty due to selecting wrong data that does not exist in db, it throws error.
+    if (dataArr.length !== 0) {
+        let keys = Object.keys(dataArr[0]);
+        let filteredKeys = keys.filter(m => m !== 'device_id' && m !== 'record_id' && m !== 'timestamp');   
+            for (let i = 0; i < filteredKeys.length; i++) {                      
+                datasetsArr[i] = {}; //Creates n number of new object 
+                let key = filteredKeys[i];   
+                datasetsArr[i].name = key;   
+                datasetsArr[i].chartType = 'line';    
+
+                let tmpArr = [];
+                for(let k in dataArr){
+                    tmpArr.push(dataArr[k][key]);
+                }
+                datasetsArr[i].values = tmpArr;
+            }
+
+        console.log(datasetsArr);
+    }
+
+    //TODO: handle error when return data is null
     return (
         <div className="charts">
             <ReactFrappeChart
@@ -37,28 +48,7 @@ const LineGraph = ({ data }) => {
                 height={250}
                 data={{
                     labels: timeArr.length !== 0 ? timeArr : ["Error"],
-                    datasets: [
-                        {
-                            name: "CO2",
-                            values: co2Arr.length !== 0 ? co2Arr : [0],
-                            chartType: 'line'
-                        },
-                        {
-                            name: "Humidity",
-                            values: humidityArr.length !== 0 ? humidityArr : [0],
-                            chartType: 'line'
-                        },
-                        {
-                            name: "Temperature",
-                            values: tempArr.length !== 0 ? tempArr : [0],
-                            chartType: 'line'
-                        },
-                        {
-                            name: "TVOC",
-                            values: tvocArr.length !== 0 ? tvocArr : [0],
-                            chartType: 'line'
-                        },
-                    ]
+                    datasets: datasetsArr
                 }}
             />
         </div>
