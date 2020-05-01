@@ -19,6 +19,7 @@ class App extends Component {
             startDate: new Date(),
             endDate: new Date(),
             device: "1",
+            showLineGraph: false,
             isSubmitted: false
         };
 
@@ -47,10 +48,15 @@ class App extends Component {
                 "Humidity": this.state.Humidity
             })
         })
+
             .then(res => res.json())
             .then((data) => {
                 this.setState({ dataByDevice: data });
                 this.setState({ isSubmitted: true });
+                if (!this.state.showLineGraph) {
+                    this.setState({showLineGraph: true});
+                }
+                console.log(JSON.stringify(data, 1, null));
             })
             .catch(console.log)
 
@@ -122,16 +128,16 @@ class App extends Component {
 
                     <Button
                         as="input" type="button" variant="outline-primary"
-                        onClick={!this.state.isSubmitted ? this.handleSubmit : null}
+                        onClick={this.handleSubmit}
                         value="Submit"
                         size="sm"
-                        disabled={this.state.isSubmitted} readOnly/>
+                    />
 
                     <Button as="input" type="button" variant="outline-secondary" onClick={this.onclickReset} value="Reset" size="sm" readOnly/>
 
                 </form>
 
-                {this.state.isSubmitted && <LineGraph data={this.state.dataByDevice} />}
+                {this.state.showLineGraph && <LineGraph data={this.state.dataByDevice} />}
 
             </div>
         );
