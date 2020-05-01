@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Header from './components/Header';
 import LineGraph from './components/LineGraph'
 import DatePicker from "react-datepicker";
+import Form from "react-bootstrap/Form";
 import moment from 'moment';
+import Button from 'react-bootstrap/Button';
 
 class App extends Component {
 
@@ -10,10 +12,14 @@ class App extends Component {
         super(props);
         this.state = {
             dataByDevice: [],
+            Temperature: true,
+            TVOC: true,
+            CO2: true,
+            Humidity: true,
             startDate: new Date(),
             endDate: new Date(),
             device: "1",
-            isSubmitted:false
+            isSubmitted: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -21,30 +27,33 @@ class App extends Component {
     }
 
 
-
     //SEND POST REQUEST
     handleSubmit(event) {
-        
-        alert("device_id: "+ this.state.device + "\n" +
-                "timeStart: "+moment(this.state.startDate).format('YYYY-MM-DD') + "\n"+
-                "timeEnd: "+moment(this.state.endDate).format('YYYY-MM-DD'));
-                
-        fetch('http://localhost:5000/records_test', {
+
+        alert("device_id: " + this.state.device + "\n" +
+            "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD') + "\n" +
+            "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD'));
+
+        fetch('http://localhost:5000/readings', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "device_id": this.state.device,
-                "timeStart": moment(this.state.startDate).format('YYYY-MM-DD'),
-                "timeEnd": moment(this.state.endDate).format('YYYY-MM-DD')
+                "Start_date": moment(this.state.startDate).format('YYYY-MM-DD'),
+                "End_date": moment(this.state.endDate).format('YYYY-MM-DD'),
+                "Temperature": this.state.Temperature,
+                "TVOC": this.state.TVOC,
+                "CO2": this.state.CO2,
+                "Humidity": this.state.Humidity
             })
         })
             .then(res => res.json())
             .then((data) => {
                 this.setState({ dataByDevice: data });
-                this.setState({ isSubmitted: true});
+                this.setState({ isSubmitted: true });
             })
             .catch(console.log)
-     
+
     }
 
     changeStartDate = (event) => {
@@ -60,10 +69,30 @@ class App extends Component {
         this.setState({ device: event.target.value });
     }
 
+    checkBoxChange(key, event) {
+        let newObj = {};
+        newObj[key] = event.target.checked;
+        this.setState(newObj);
+    }
+
+    onclickReset = (event) => {
+        window.location.reload();
+    }
 
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
-        
+
+        const cboxes = ["Temperature", "TVOC", "CO2", "Humidity"];
+        const cboxItems = [];
+        cboxes.forEach(item => cboxItems.push(
+            <Form.Check
+                type='checkbox'
+                label={item}
+                key={item}
+                checked={this.state[item]}
+                onChange={this.checkBoxChange.bind(this, item)}
+            />
+        ))
         return (
             <div>
                 <Header />
@@ -89,10 +118,21 @@ class App extends Component {
                         selected={this.state.endDate}
                         onChange={this.changeEndDate}
                     />
-                    <input type="button" onClick={this.handleSubmit} value="Submit" />
+                    {cboxItems}
+
+                    <Button
+                        as="input" type="button" variant="outline-primary"
+                        onClick={!this.state.isSubmitted ? this.handleSubmit : null}
+                        value="Submit"
+                        size="sm"
+                        disabled={this.state.isSubmitted} readOnly/>
+
+                    <Button as="input" type="button" variant="outline-secondary" onClick={this.onclickReset} value="Reset" size="sm" readOnly/>
+
                 </form>
 
                 {this.state.isSubmitted && <LineGraph data={this.state.dataByDevice} />}
+
             </div>
         );
     }
