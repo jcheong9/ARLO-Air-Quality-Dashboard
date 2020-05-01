@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
 import LineGraph from './components/LineGraph'
+import Login from './components/Login'
 import DatePicker from "react-datepicker";
 import Form from "react-bootstrap/Form";
 import moment from 'moment';
@@ -95,6 +96,7 @@ class App extends Component {
         ))
         return (
             <div>
+                <Login/>
                 <Header />
                 <form>
                     <label>
