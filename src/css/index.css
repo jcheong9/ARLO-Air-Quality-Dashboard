@@ -1,7 +1,7 @@
 @import "~react-datepicker/dist/react-datepicker.css";
 
 body {
-  margin: 0;
+  margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -18,13 +18,44 @@ body {
   height: 5em;
 }
 
-.about-page .jumbotron {
+/* .header-container {} */
+
+.jumbotron {
   margin: 0;
-  background: rgba(9, 69, 95, 0.8);
-  color: white;
+  background-color: rgba(13, 80, 109, 0.8) !important;
+  color: white !important;
   border-radius: 0 !important;
+  width: 100%;
 }
 
+.form-div{
+  margin: 50px;
+  overflow-x: hidden;
+
+}
+.form-check{
+  display: inline;
+  margin: 10px;
+}
+
+.form-check:nth-child(1){
+  margin: 0px;
+}
+
+.btn {
+  margin: 20px 0;
+}
+.react-datepicker-wrapper{
+  margin: 10px;
+}
+
+.checkbox-group{
+  display: block;
+}
+
+.dropdown{
+  margin-right: 40px;
+}
 /*React apply activeClassName to <a> element, but Bootstrap active class is over <li> element*/
 
 .navbar .nav .active,
@@ -35,14 +66,12 @@ body {
   color: #333 !important;
 }
 
-.avatar {
-  max-width: 80px
-}
 
 #navbar {
   padding-left: 0px !important;
 }
 
-#header-title {
+#header {
   background-color: rgb(238, 235, 235);
+  margin: 40px;
 }

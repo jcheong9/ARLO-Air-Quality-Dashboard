@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import moment from 'moment'
-
-// import { string, object } from "prop-types";
 import ReactFrappeChart from "react-frappe-charts";
 
 const LineGraph = ({ data }) => {
@@ -26,7 +24,7 @@ const LineGraph = ({ data }) => {
                 datasetsArr[i] = {}; //Creates n number of new object 
                 let key = filteredKeys[i];   
                 datasetsArr[i].name = key;   
-                datasetsArr[i].chartType = 'line';    
+                datasetsArr[i].chartType = 'line'; //Sets the graph type to line graph   
 
                 let tmpArr = [];
                 for(let k in dataArr){
@@ -38,7 +36,7 @@ const LineGraph = ({ data }) => {
         console.log(datasetsArr);
     }
 
-    //TODO: handle error when return data is null
+    //TODO: handle error when return data is null or only 1 record
     return (
         <div className="charts">
             <ReactFrappeChart
