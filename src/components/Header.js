@@ -4,8 +4,8 @@ class Header extends Component {
 
   render() {
     return (
-      <div className="row">
-        <h2 className="header">Application Header</h2>
+      <div className="header-container jumbotron">
+        <h2 className="header">ARLO Air Quality Dashboard</h2>
       </div>
     );
   }

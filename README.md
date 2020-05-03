@@ -1,31 +1,11 @@
 # ARLO-Air-Quality-Dashboard
 
-python version 3.8.2
 
---Server--
-Create virtualenv for window:
-1) install virtualenv and pip
-2) virtualenv venv
-3) venv\Scripts\activate
-4) pip install -r requirements.txt
 
-Creating requirements.txt:
-1)pip freeze > requirements.txt
+1. ARLO-Air-Quality-API -> checkout dev branch and run as localhost:5000 
 
-Remove all requirements.txt:
-1)pip uninstall -r requirements.txt -y
+1. npm install
 
-How to start:
-1) cd server
-2) python app.py
+2. npm start 
 
---Client--
-How to start:
-1) cd client
-2) cd my-app
-3) npm start
 
---Database--
-1) cd server
-2) venv\Scripts\activate
-3) python db.py

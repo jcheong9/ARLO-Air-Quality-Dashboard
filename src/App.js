@@ -21,6 +21,7 @@ class App extends Component {
             startDate: new Date(),
             endDate: new Date(),
             device: "1",
+            showLineGraph: false,
             isSubmitted: false
         };
 
@@ -49,10 +50,15 @@ class App extends Component {
                 "Humidity": this.state.Humidity
             })
         })
+
             .then(res => res.json())
             .then((data) => {
                 this.setState({ dataByDevice: data });
                 this.setState({ isSubmitted: true });
+                if (!this.state.showLineGraph) {
+                    this.setState({ showLineGraph: true });
+                }
+                console.log(JSON.stringify(data, 1, null));
             })
             .catch(console.log)
 
@@ -77,9 +83,9 @@ class App extends Component {
         this.setState(newObj);
     }
 
-    onclickReset = (event) => {
-        window.location.reload();
-    }
+    // onclickReset = (event) => {
+    //     window.location.reload();
+    // }
 
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
@@ -100,43 +106,47 @@ class App extends Component {
                 <Login/>
                 <Protect/>
                 <Header />
-                <form>
-                    <label>
-                        Pick a device:
-                        <select onChange={this.changeDevice} value={this.state.selectDevice}>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                        </select>
-                    </label>
-                    <DatePicker
-                        selected={this.state.startDate}
-                        onChange={this.changeStartDate}
-                    />
-                    <DatePicker
-                        selected={this.state.endDate}
-                        onChange={this.changeEndDate}
-                    />
-                    {cboxItems}
+                <div className="form-div">
+                    <form>
+                        <label>
+                            <select className="dropdown" onChange={this.changeDevice} value={this.state.selectDevice}>
+                                <option value="1">Device 1</option>
+                                <option value="2">Device 2</option>
+                                <option value="3">Device 3</option>
+                                <option value="4">Device 4</option>
+                                <option value="5">Device 5</option>
+                                <option value="6">Device 6</option>
+                                <option value="7">Device 7</option>
+                                <option value="8">Device 8</option>
+                            </select>
+                        </label>
+                        <label>Start Date: </label>
+                        <DatePicker
+                            selected={this.state.startDate}
+                            onChange={this.changeStartDate}
+                        />
+                        <label>End Date: </label>
+                        <DatePicker
+                            selected={this.state.endDate}
+                            onChange={this.changeEndDate}
+                        />
+                        <div className="checkbox-group">
+                            {cboxItems}
+                        </div>
 
-                    <Button
-                        as="input" type="button" variant="outline-primary"
-                        onClick={!this.state.isSubmitted ? this.handleSubmit : null}
-                        value="Submit"
-                        size="sm"
-                        disabled={this.state.isSubmitted} readOnly/>
+                        <Button
+                            as="input" type="button" variant="outline-primary"
+                            onClick={this.handleSubmit}
+                            value="Submit"
+                            size="sm"
+                            readOnly
+                        />
 
-                    <Button as="input" type="button" variant="outline-secondary" onClick={this.onclickReset} value="Reset" size="sm" readOnly/>
+                        {/* <Button as="input" type="button" variant="outline-secondary" onClick={this.onclickReset} value="Clear" size="sm" readOnly/> */}
 
-                </form>
-
-                {this.state.isSubmitted && <LineGraph data={this.state.dataByDevice} />}
-
+                    </form>
+                    {this.state.showLineGraph && <LineGraph data={this.state.dataByDevice} />}
+                </div>
             </div>
         );
     }
