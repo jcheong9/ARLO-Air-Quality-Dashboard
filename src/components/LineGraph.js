@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+  
+import React from 'react'
 import moment from 'moment'
 
 // import { string, object } from "prop-types";

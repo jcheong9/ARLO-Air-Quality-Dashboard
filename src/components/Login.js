@@ -1,5 +1,6 @@
 
 import React, { Component } from "react";
+import Cookies from 'js-cookie';
 
 class Login extends Component {
     constructor(props) {
@@ -9,12 +10,12 @@ class Login extends Component {
         this.username = React.createRef();
         this.password = React.createRef();
     }
-    // action="http://127.0.0.1:5000/login" method="POST"
     handleSubmit(event){
         event.preventDefault();
         fetch('http://127.0.0.1:5000/login', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
             body: JSON.stringify({
                 "username": this.username.current.value,
                 "password": this.password.current.value
@@ -24,18 +25,21 @@ class Login extends Component {
           if(res.status === 401){
             alert("Wrong password!");
           }
-        }
-          )
+          if(res.status === 200){
+            console.log("everything is good")
+            console.log(res.body.token)
+            return res.json();
+          }
+        })
         .then((data) => {
             console.log(data)
-            //this.props.history.push("/");
+            Cookies.set('token', data.token)
+
         })
         .catch((error) => console.log(error))
     }
 
   render() {
-    // action="http://127.0.0.1:5000/login" method="POST"
-    // onclick="window.location.href = 'http://localhost:3000/';"
     return (
             <form onSubmit={this.handleSubmit} id="formHide">
               <label htmlFor="email">Email</label>
