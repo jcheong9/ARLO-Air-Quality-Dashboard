@@ -26,36 +26,39 @@ class Login extends Component {
             alert("Wrong password!");
           }
           if(res.status === 200){
-            console.log("everything is good")
-            console.log(res.body.token)
             return res.json();
           }
         })
         .then((data) => {
             console.log(data)
             Cookies.set('token', data.token)
-
+            return window.location.href = '/dashboard'; 
         })
         .catch((error) => console.log(error))
     }
 
   render() {
     return (
-            <form onSubmit={this.handleSubmit} id="formHide">
-              <label htmlFor="email">Email</label>
-              <input name="username" type="text" ref={this.username} placeholder="Enter your email" />
-    
+      <form onSubmit={this.handleSubmit} id="formHide">
+          <h3>Sign In</h3>
+          <div className="form-group">
+              <label htmlFor="email">Username</label>
+              <input name="username"  className="form-control" type="text" ref={this.username} placeholder="Enter your email" />
+          </div>
+          <div className="form-group">
               <label htmlFor="email">Password</label>
               <input
-                name="password"
-                type="password"
-                ref={this.password}
-                placeholder="Enter your password"
+                  className="form-control"
+                  name="password"
+                  type="password"
+                  ref={this.password}
+                  placeholder="Enter your password"
               />
-              <button  type="submit"  >
-                Login
-              </button>
-            </form>
+          </div>
+          <button className="btn btn-primary btn-block" type="submit"  >
+              Login
+          </button>
+      </form>
 
     );
   }
