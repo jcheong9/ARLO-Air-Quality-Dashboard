@@ -17,15 +17,13 @@ class AlertDismissible extends Component{
         this.setState({ show: false });
       }
       getAlert() {
-       this.setState({
-           show: this.props.valueFromParent
-       })   
+       this.setState({ show: true})   
     }
 
     render(){
-        if (this.props.valueFromParent) {
+        if (this.state.show) {
           return (
-            <Alert variant="danger" onDismiss={this.handleDismiss} dismissible>
+            <Alert variant="danger" onClose={this.handleDismiss}  dismissible>
               <Alert.Heading>Invalid Token!</Alert.Heading>
               <p>
               Please Login Again.
