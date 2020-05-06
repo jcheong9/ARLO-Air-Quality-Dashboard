@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import Cookies from 'js-cookie';
 
+
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -30,11 +31,12 @@ class Login extends Component {
           }
         })
         .then((data) => {
-            console.log(data)
             Cookies.set('token', data.token)
             return window.location.href = '/dashboard'; 
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          return window.location.href = '/';
+        })
     }
 
   render() {
@@ -43,7 +45,7 @@ class Login extends Component {
           <h3>Sign In</h3>
           <div className="form-group">
               <label htmlFor="email">Username</label>
-              <input name="username"  className="form-control" type="text" ref={this.username} placeholder="Enter your email" />
+              <input name="username"  className="form-control" type="text" ref={this.username} placeholder="Enter your Username" />
           </div>
           <div className="form-group">
               <label htmlFor="email">Password</label>

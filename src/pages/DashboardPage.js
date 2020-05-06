@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
+import  { Redirect } from 'react-router-dom'
 
 class DashboardPage extends Component {
 
@@ -21,7 +22,8 @@ class DashboardPage extends Component {
             endDate: new Date(),
             device: "1",
             showLineGraph: false,
-            isSubmitted: false
+            isSubmitted: false,
+            fetchError: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -36,7 +38,7 @@ class DashboardPage extends Component {
             "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD') + "\n" +
             "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD'));
         let tokenLocal = Cookies.get('token')
-        fetch(`http://localhost:5000/readings?token=${tokenLocal}`, {
+       return fetch(`http://localhost:5000/readings?token=${tokenLocal}`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -49,17 +51,21 @@ class DashboardPage extends Component {
                 "Humidity": this.state.Humidity
             })
         })
+        .then(res => res.json())
+        .then((data) => {
+            this.setState({ dataByDevice: data });
+            this.setState({ isSubmitted: true });
+            if (!this.state.showLineGraph) {
+                this.setState({ showLineGraph: true });
+            }
+            console.log(JSON.stringify(data, 1, null));
+        })
+        .catch((error) => {
+            console.log(error)
+            // return window.location.href = '/';
+            this.setState({fetchError: true});
+        });
 
-            .then(res => res.json())
-            .then((data) => {
-                this.setState({ dataByDevice: data });
-                this.setState({ isSubmitted: true });
-                if (!this.state.showLineGraph) {
-                    this.setState({ showLineGraph: true });
-                }
-                console.log(JSON.stringify(data, 1, null));
-            })
-            .catch(console.log)
 
     }
 
@@ -82,10 +88,6 @@ class DashboardPage extends Component {
         this.setState(newObj);
     }
 
-    // onclickReset = (event) => {
-    //     window.location.reload();
-    // }
-
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
 
@@ -100,6 +102,14 @@ class DashboardPage extends Component {
                 onChange={this.checkBoxChange.bind(this, item)}
             />
         ))
+        if(this.state.fetchError){
+            return <Redirect to={{
+                pathname: '/',
+                state: { stateAlertError: true }
+            }}
+            />
+        }
+
         return (
             <div>
                 <Header />
