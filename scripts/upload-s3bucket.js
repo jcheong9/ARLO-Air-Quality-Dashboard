@@ -10,19 +10,19 @@ function uploadArtifactsToS3() {
 
     const testResultsPath = '../build';
 
-    const walkSync = (currentDirPath, callback) => {
+    const uploadSubfiles = (currentDirPath, callback) => {
         fs.readdirSync(currentDirPath).forEach((name) => {
             const filePath = path.join(currentDirPath, name);
             const stat = fs.statSync(filePath);
             if (stat.isFile()) {
                 callback(filePath, stat);
             } else if (stat.isDirectory()) {
-                walkSync(filePath, callback);
+                uploadSubfiles(filePath, callback);
             }
         });
     };
 
-    walkSync(testResultsPath, async (filePath) => {
+    uploadSubfiles(testResultsPath, async (filePath) => {
         let bucketPath = filePath.substring(testResultsPath.length+1);
         let newBucketPath = bucketPath.replace(/\\/g, "/"); //Replaces \ to / 
         let params = {
