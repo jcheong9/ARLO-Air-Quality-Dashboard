@@ -42,9 +42,11 @@ const LineGraph = ({ data }) => {
         <div className="charts">
             <ReactFrappeChart
                 type="line"
+                lineOptions={{hideDots: 1}}
                 colors={["#21ba45"]}
                 axisOptions={{ xAxisMode: "tick", yAxisMode: "tick", xIsSeries: 1 }}
                 height={250}
+                y_axis_exp_based_on_range={true}
                 data={{
                     labels: timeArr.length !== 0 ? timeArr : ["Error"],
                     datasets: datasetsArr
