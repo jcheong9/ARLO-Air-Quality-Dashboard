@@ -17,15 +17,16 @@ class DashboardPage extends Component {
             TVOC: true,
             CO2: true,
             Humidity: true,
-            startDate: new Date(),
+            startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            device: "1",
+            device: "2",
             showLineGraph: false,
             error: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit();
     }
 
 
@@ -112,7 +113,7 @@ class DashboardPage extends Component {
                 <div className="form-div">
                     <form>
                         <label>
-                            <select className="dropdown" onChange={this.changeDevice} value={this.state.selectDevice}>
+                            <select className="dropdown" onChange={this.changeDevice} value={this.state.device}>
                                 <option value="1">Device 1</option>
                                 <option value="2">Device 2</option>
                                 <option value="3">Device 3</option>
