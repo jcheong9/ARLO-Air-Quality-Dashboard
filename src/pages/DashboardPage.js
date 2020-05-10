@@ -26,7 +26,8 @@ class DashboardPage extends Component {
             device: "1",
             showLineGraph: false,
             error: false,
-            errorMessage: ""
+            errorMessage: "",
+            loading: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -37,7 +38,7 @@ class DashboardPage extends Component {
 
     //SEND POST REQUEST
     handleSubmit(event) {
-
+        this.setState({loading: true});
         // alert("device_id: " + this.state.device + "\n" +
         //     "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD HH:mm') + "\n" +
         //     "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD HH:mm'));
@@ -90,13 +91,15 @@ class DashboardPage extends Component {
                         co2Data: { records_test_data: co2Data},
                         tvocData: { records_test_data: tvocData},
                         showLineGraph: true,
-                        error: false
+                        error: false,
+                        loading: false
                     });
                 } else {
                     this.setState({ 
                         error: true,
                         errorMessage: "No data for this time period",
-                        showLineGraph: false
+                        showLineGraph: false,
+                        loading: false
                     });
                 }
                 console.log(JSON.stringify(data, 1, null));
@@ -113,11 +116,15 @@ class DashboardPage extends Component {
     }
 
     changeStartDate = (event) => {
-        this.setState({ startDate: event });
+        this.setState({ startDate: event }, () => {
+            this.handleSubmit();
+        });
     }
 
     changeEndDate = (event) => {
-        this.setState({ endDate: event });
+        this.setState({ endDate: event }, () => {
+            this.handleSubmit();
+        });
     }
 
 
@@ -141,7 +148,10 @@ class DashboardPage extends Component {
         if (this.state.error){
             return <div> <h1>{this.state.errorMessage}</h1></div>
         } 
-        if (this.state.showLineGraph) {
+        if (this.state.loading) {
+            return <h4> Loading...</h4>
+        }
+        if (!this.state.loading && this.state.showLineGraph) {
             return <div>
                 <h4>Temperature</h4>
                 <LineGraph data={this.state.tempData} />
