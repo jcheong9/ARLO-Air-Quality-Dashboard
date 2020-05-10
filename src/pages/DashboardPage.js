@@ -16,11 +16,11 @@ class DashboardPage extends Component {
             tvocData: [],
             co2Data: [],
             humidityData:[],
-            dataByDevice: [],
-            Temperature: true,
-            TVOC: true,
-            CO2: true,
-            Humidity: true,
+            //dataByDevice: [],
+            //Temperature: true,
+            //TVOC: true,
+            //CO2: true,
+            //Humidity: true,
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
             device: "1",
@@ -49,17 +49,17 @@ class DashboardPage extends Component {
                 "device_id": this.state.device,
                 "Start_date": moment(this.state.startDate).format('YYYY-MM-DD HH:mm'),
                 "End_date": moment(this.state.endDate).format('YYYY-MM-DD HH:mm'),
-                "Temperature": this.state.Temperature,
-                "TVOC": this.state.TVOC,
-                "CO2": this.state.CO2,
-                "Humidity": this.state.Humidity
+                "Temperature": true,
+                "TVOC": true,
+                "CO2": true,
+                "Humidity": true
             })
         })
 
             .then(res => res.json())
             .then((data) => {
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
-                    this.setState({ dataByDevice: data });
+                    // this.setState({ dataByDevice: data });
                     let tempData = data.records_test_data.map((x) => {
                         return {
                             device_id: x.device_id,
