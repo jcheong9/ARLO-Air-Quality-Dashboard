@@ -15,7 +15,7 @@ const LineGraph = ({ data }) => {
     }
 
     for (let s = 0; s < st.length; s++) {
-        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD');
+        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD HH:mm');
         timeArr.push(convertDate);
     }
     if (dataArr.length !== 0) {
@@ -49,7 +49,14 @@ const LineGraph = ({ data }) => {
                 y_axis_exp_based_on_range={true}
                 data={{
                     labels: timeArr.length !== 0 ? timeArr : ["Error"],
-                    datasets: datasetsArr
+                    datasets: datasetsArr,
+                    // yMarkers: [
+                    //     {
+                    //         label: '',
+                    //         value: 0,
+                    //         type: 'solid'
+                    //     }
+                    // ]
                 }}
             />
         </div>

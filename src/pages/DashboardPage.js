@@ -33,16 +33,16 @@ class DashboardPage extends Component {
     handleSubmit(event) {
 
         alert("device_id: " + this.state.device + "\n" +
-            "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD') + "\n" +
-            "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD'));
+            "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD HH:mm') + "\n" +
+            "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD HH:mm'));
         let tokenLocal = Cookies.get('token')
         fetch(`http://localhost:5000/readings?token=${tokenLocal}`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "device_id": this.state.device,
-                "Start_date": moment(this.state.startDate).format('YYYY-MM-DD'),
-                "End_date": moment(this.state.endDate).format('YYYY-MM-DD'),
+                "Start_date": moment(this.state.startDate).format('YYYY-MM-DD HH:mm'),
+                "End_date": moment(this.state.endDate).format('YYYY-MM-DD HH:mm'),
                 "Temperature": this.state.Temperature,
                 "TVOC": this.state.TVOC,
                 "CO2": this.state.CO2,
@@ -127,11 +127,23 @@ class DashboardPage extends Component {
                         <DatePicker
                             selected={this.state.startDate}
                             onChange={this.changeStartDate}
+                            todayButton="Go to today"
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={10}
+                            timeCaption="time"
+                            dateFormat="MMMM d, yyyy h:mm aa"
                         />
                         <label>End Date: </label>
                         <DatePicker
                             selected={this.state.endDate}
                             onChange={this.changeEndDate}
+                            todayButton="Go to today"
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={10}
+                            timeCaption="time"
+                            dateFormat="MMMM d, yyyy h:mm aa"
                         />
                         <div className="checkbox-group">
                             {cboxItems}
