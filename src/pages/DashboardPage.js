@@ -17,15 +17,16 @@ class DashboardPage extends Component {
             TVOC: true,
             CO2: true,
             Humidity: true,
-            startDate: new Date(),
+            startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
             device: "1",
             showLineGraph: false,
-            isSubmitted: false
+            error: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit();
     }
 
 
@@ -52,14 +53,20 @@ class DashboardPage extends Component {
 
             .then(res => res.json())
             .then((data) => {
-                this.setState({ dataByDevice: data });
-                this.setState({ isSubmitted: true });
-                if (!this.state.showLineGraph) {
+                if (data && data.records_test_data && data.records_test_data.length > 0) {
+                    this.setState({ dataByDevice: data });
                     this.setState({ showLineGraph: true });
+                } else {
+                    this.setState({ error: true });
+                    this.setState({ showLineGraph: false });
                 }
                 console.log(JSON.stringify(data, 1, null));
             })
-            .catch(console.log)
+            .catch(err => {
+                console.log(err);
+                this.setState({ error: true });
+                this.setState({ showLineGraph: false });
+            })
 
     }
 
@@ -106,7 +113,7 @@ class DashboardPage extends Component {
                 <div className="form-div">
                     <form>
                         <label>
-                            <select className="dropdown" onChange={this.changeDevice} value={this.state.selectDevice}>
+                            <select className="dropdown" onChange={this.changeDevice} value={this.state.device}>
                                 <option value="1">Device 1</option>
                                 <option value="2">Device 2</option>
                                 <option value="3">Device 3</option>
@@ -155,6 +162,7 @@ class DashboardPage extends Component {
 
                     </form>
                     {this.state.showLineGraph && <LineGraph data={this.state.dataByDevice} />}
+                    {this.state.error && <div> <h1>Data could not be retrieved</h1></div>}
                 </div>
             </div>
         );
