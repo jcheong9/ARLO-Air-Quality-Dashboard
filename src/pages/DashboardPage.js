@@ -19,7 +19,7 @@ class DashboardPage extends Component {
             Humidity: true,
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            device: "2",
+            device: "1",
             showLineGraph: false,
             error: false
         };
