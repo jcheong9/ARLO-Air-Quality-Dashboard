@@ -12,6 +12,8 @@ class DashboardPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tempHumidityData: [],
+            tvocCO2Data: [],
             dataByDevice: [],
             Temperature: true,
             TVOC: true,
@@ -19,7 +21,7 @@ class DashboardPage extends Component {
             Humidity: true,
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            device: "1",
+            device: "2",
             showLineGraph: false,
             error: false
         };
@@ -55,6 +57,22 @@ class DashboardPage extends Component {
             .then((data) => {
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
                     this.setState({ dataByDevice: data });
+                    let dataset1 = data.records_test_data.map((x) => {
+                        return {
+                            device_id: x.device_id,
+                            temp: x.temp,
+                            humidity: x.humidity
+                        }
+                    })
+                    let dataset2 = data.records_test_data.map((x) => {
+                        return {
+                            device_id: x.device_id,
+                            co2: x.co2,
+                            tvoc: x.tvoc
+                        }
+                    })
+                    this.setState({ tempHumidityData: { records_test_data: dataset1} });
+                    this.setState({ tvocCO2Data: { records_test_data: dataset2} });
                     this.setState({ showLineGraph: true });
                 } else {
                     this.setState({ error: true });
@@ -161,7 +179,8 @@ class DashboardPage extends Component {
                         {/* <Button as="input" type="button" variant="outline-secondary" onClick={this.onclickReset} value="Clear" size="sm" readOnly/> */}
 
                     </form>
-                    {this.state.showLineGraph && <LineGraph data={this.state.dataByDevice} />}
+                    {this.state.showLineGraph && <LineGraph data={this.state.tempHumidityData} />}
+                    {this.state.showLineGraph && <LineGraph data={this.state.tvocCO2Data} />}
                     {this.state.error && <div> <h1>Data could not be retrieved</h1></div>}
                 </div>
             </div>
