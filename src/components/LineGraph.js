@@ -49,7 +49,14 @@ const LineGraph = ({ data }) => {
                 y_axis_exp_based_on_range={true}
                 data={{
                     labels: timeArr.length !== 0 ? timeArr : ["Error"],
-                    datasets: datasetsArr
+                    datasets: datasetsArr,
+                    // yMarkers: [
+                    //     {
+                    //         label: '',
+                    //         value: 0,
+                    //         type: 'solid'
+                    //     }
+                    // ]
                 }}
             />
         </div>
