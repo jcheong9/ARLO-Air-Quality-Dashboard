@@ -12,8 +12,10 @@ class DashboardPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tempHumidityData: [],
-            tvocCO2Data: [],
+            tempData: [],
+            tvocData: [],
+            co2Data: [],
+            humidityData:[],
             dataByDevice: [],
             Temperature: true,
             TVOC: true,
@@ -21,9 +23,10 @@ class DashboardPage extends Component {
             Humidity: true,
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            device: "2",
+            device: "1",
             showLineGraph: false,
-            error: false
+            error: false,
+            errorMessage: ""
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -35,9 +38,9 @@ class DashboardPage extends Component {
     //SEND POST REQUEST
     handleSubmit(event) {
 
-        alert("device_id: " + this.state.device + "\n" +
-            "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD HH:mm') + "\n" +
-            "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD HH:mm'));
+        // alert("device_id: " + this.state.device + "\n" +
+        //     "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD HH:mm') + "\n" +
+        //     "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD HH:mm'));
         let tokenLocal = Cookies.get('token')
         fetch(`http://localhost:5000/readings?token=${tokenLocal}`, {
             method: 'post',
@@ -57,33 +60,54 @@ class DashboardPage extends Component {
             .then((data) => {
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
                     this.setState({ dataByDevice: data });
-                    let dataset1 = data.records_test_data.map((x) => {
+                    let tempData = data.records_test_data.map((x) => {
                         return {
                             device_id: x.device_id,
                             temp: x.temp,
+                        }
+                    })
+                    let humidityData = data.records_test_data.map((x) => {
+                        return {
+                            device_id: x.device_id,
                             humidity: x.humidity
                         }
                     })
-                    let dataset2 = data.records_test_data.map((x) => {
+                    let co2Data = data.records_test_data.map((x) => {
                         return {
                             device_id: x.device_id,
                             co2: x.co2,
+                        }
+                    })
+                    let tvocData = data.records_test_data.map((x) => {
+                        return {
+                            device_id: x.device_id,
                             tvoc: x.tvoc
                         }
                     })
-                    this.setState({ tempHumidityData: { records_test_data: dataset1} });
-                    this.setState({ tvocCO2Data: { records_test_data: dataset2} });
-                    this.setState({ showLineGraph: true });
+                    this.setState({ 
+                        tempData: { records_test_data: tempData},
+                        humidityData: { records_test_data: humidityData},
+                        co2Data: { records_test_data: co2Data},
+                        tvocData: { records_test_data: tvocData},
+                        showLineGraph: true,
+                        error: false
+                    });
                 } else {
-                    this.setState({ error: true });
-                    this.setState({ showLineGraph: false });
+                    this.setState({ 
+                        error: true,
+                        errorMessage: "No data for this time period",
+                        showLineGraph: false
+                    });
                 }
                 console.log(JSON.stringify(data, 1, null));
             })
             .catch(err => {
                 console.log(err);
-                this.setState({ error: true });
-                this.setState({ showLineGraph: false });
+                this.setState({ 
+                    error: true,
+                    errorMessage: "Error fetching data",
+                    showLineGraph: false
+                });
             })
 
     }
@@ -98,7 +122,9 @@ class DashboardPage extends Component {
 
 
     changeDevice = (event) => {
-        this.setState({ device: event.target.value });
+        this.setState({ device: event.target.value }, () => {
+            this.handleSubmit();
+        })
     }
 
     checkBoxChange(key, event) {
@@ -111,20 +137,37 @@ class DashboardPage extends Component {
     //     window.location.reload();
     // }
 
+    showGraphs = () => {
+        if (this.state.error){
+            return <div> <h1>{this.state.errorMessage}</h1></div>
+        } 
+        if (this.state.showLineGraph) {
+            return <div>
+                <h4>Temperature</h4>
+                <LineGraph data={this.state.tempData} />
+                <h4>Humidity</h4>
+                <LineGraph data={this.state.humidityData} />
+                <h4>CO2</h4>
+                <LineGraph data={this.state.co2Data} />
+                <h4>TVOC</h4>
+                <LineGraph data={this.state.tvocData} />
+            </div>
+        }
+    }
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
 
-        const cboxes = ["Temperature", "TVOC", "CO2", "Humidity"];
-        const cboxItems = [];
-        cboxes.forEach(item => cboxItems.push(
-            <Form.Check
-                type='checkbox'
-                label={item}
-                key={item}
-                checked={this.state[item]}
-                onChange={this.checkBoxChange.bind(this, item)}
-            />
-        ))
+        // const cboxes = ["Temperature", "TVOC", "CO2", "Humidity"];
+        // const cboxItems = [];
+        // cboxes.forEach(item => cboxItems.push(
+        //     <Form.Check
+        //         type='checkbox'
+        //         label={item}
+        //         key={item}
+        //         checked={this.state[item]}
+        //         onChange={this.checkBoxChange.bind(this, item)}
+        //     />
+        // ))
         return (
             <div>
                 <Header />
@@ -164,24 +207,22 @@ class DashboardPage extends Component {
                             timeCaption="time"
                             dateFormat="MMMM d, yyyy h:mm aa"
                         />
-                        <div className="checkbox-group">
+                        {/* <div className="checkbox-group">
                             {cboxItems}
-                        </div>
+                        </div> */}
 
-                        <Button
+                        {/* <Button
                             as="input" type="button" variant="outline-primary"
                             onClick={this.handleSubmit}
                             value="Submit"
                             size="sm"
                             readOnly
-                        />
+                        /> */}
 
                         {/* <Button as="input" type="button" variant="outline-secondary" onClick={this.onclickReset} value="Clear" size="sm" readOnly/> */}
 
                     </form>
-                    {this.state.showLineGraph && <LineGraph data={this.state.tempHumidityData} />}
-                    {this.state.showLineGraph && <LineGraph data={this.state.tvocCO2Data} />}
-                    {this.state.error && <div> <h1>Data could not be retrieved</h1></div>}
+                    {this.showGraphs()}
                 </div>
             </div>
         );
