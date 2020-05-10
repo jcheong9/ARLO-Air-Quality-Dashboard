@@ -47,7 +47,14 @@ const LineGraph = ({ data }) => {
                 height={250}
                 data={{
                     labels: timeArr.length !== 0 ? timeArr : ["Error"],
-                    datasets: datasetsArr
+                    datasets: datasetsArr,
+                    // yMarkers: [
+                    //     {
+                    //         label: '',
+                    //         value: 0,
+                    //         type: 'solid'
+                    //     }
+                    // ]
                 }}
             />
         </div>
