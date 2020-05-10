@@ -15,7 +15,7 @@ const LineGraph = ({ data }) => {
     }
 
     for (let s = 0; s < st.length; s++) {
-        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD');
+        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD HH:mm');
         timeArr.push(convertDate);
     }
     if (dataArr.length !== 0) {
