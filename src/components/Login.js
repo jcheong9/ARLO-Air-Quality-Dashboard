@@ -40,26 +40,25 @@ class Login extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit} id="formHide">
-          <h3>Sign In</h3>
-          <div className="form-group">
-              <label htmlFor="email">Username</label>
-              <input name="username"  className="form-control" type="text" ref={this.username} placeholder="Enter your email" />
-          </div>
-          <div className="form-group">
-              <label htmlFor="email">Password</label>
-              <input
-                  className="form-control"
-                  name="password"
-                  type="password"
-                  ref={this.password}
-                  placeholder="Enter your password"
-              />
-          </div>
-          <button className="btn btn-primary btn-block" type="submit"  >
-              Login
-          </button>
+        <h3 className="page_title">Sign In</h3>
+        <div className="form-group">
+          <label htmlFor="email">Username</label>
+          <input name="username"  className="form-control" type="text" ref={this.username} placeholder="Enter your email" />
+        </div>
+        <div className="form-group">
+          <label htmlFor="email">Password</label>
+          <input
+            className="form-control"
+            name="password"
+            type="password"
+            ref={this.password}
+            placeholder="Enter your password"
+          />
+        </div>
+        <button className="btn btn-primary btn-block" type="submit"  >
+          Login
+        </button>
       </form>
-
     );
   }
 }
