@@ -15,10 +15,6 @@ const LastReadings = (props) => {
                     <span>TVOC</span>
                 </div>
                 <div className="text-center border-right w-25">
-                    <h5>{tvoc}</h5>
-                    <span>TVOC</span>
-                </div>
-                <div className="text-center border-right w-25">
                     <h5>{temp}</h5>
                     <span>Temperature &#8451;</span>
                 </div>
