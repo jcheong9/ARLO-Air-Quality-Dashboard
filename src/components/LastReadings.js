@@ -2,8 +2,6 @@ import React from 'react';
 import moment from 'moment';
 
 const LastReadings = (props) => {
-    console.log("IN LAST READINGS");
-    console.log(JSON.stringify(props.deviceData))
     const {timestamp, co2, temp, humidity, tvoc} = props.reading;
 
     return (

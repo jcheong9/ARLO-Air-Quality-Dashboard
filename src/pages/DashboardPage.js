@@ -67,9 +67,6 @@ class DashboardPage extends Component {
 
             .then(res => res.json())
             .then((data) => {
-                console.log("DATA!!!")
-            
-                console.log(JSON.stringify(data, 1, null));
                 this.setState({
                     lastReadings: data.records_data[0],
                     latestReadingsError: false
@@ -102,7 +99,6 @@ class DashboardPage extends Component {
 
             .then(res => res.json())
             .then((data) => {
-                console.log(JSON.stringify(data.records_test_data));
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
                     let tempData = data.records_test_data.map((x) => {
                         return {
