@@ -13,6 +13,7 @@ class DashboardPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            devices: [],
             tempData: [],
             tvocData: [],
             co2Data: [],
@@ -20,21 +21,44 @@ class DashboardPage extends Component {
             lastReadings: {},
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            device: "2",
+            device: 1,
             showLineGraph: false,
             graphError: false,
             graphErrorMessage: "",
             latestReadingsError: false,
             latestReadingsErrorMessage: "",
+            deviceError: false,
             loading: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSubmit();
         this.getlatest = this.getLatest.bind(this);
+        this.getDevices = this.getDevices.bind(this);
+        this.getDevices();
     }
 
+    getDevices() {
+        let tokenLocal = Cookies.get('token')
+        fetch(`http://localhost:5000/devices?token=${tokenLocal}`, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
+        })
+
+            .then(res => res.json())
+            .then((data) => {
+                this.setState({
+                    devices: data.device_test_data,
+                    deviceError: false,
+                    device: data.device_test_data[0].device_id
+                });
+                this.handleSubmit();
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({deviceError: true})
+            });
+    }
     getLatest(event) {
         let tokenLocal = Cookies.get('token')
         fetch(`http://localhost:5000/readings/device?id=${this.state.device}&token=${tokenLocal}`, {
@@ -79,6 +103,7 @@ class DashboardPage extends Component {
 
             .then(res => res.json())
             .then((data) => {
+                console.log(JSON.stringify(data.records_test_data));
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
                     let tempData = data.records_test_data.map((x) => {
                         return {
@@ -184,62 +209,65 @@ class DashboardPage extends Component {
             </div>
         }
     }
+
+    showContents = () => {
+        if(this.state.deviceError) {
+            return <h1 className="mt-5 text-center"> Sorry, there was an error connecting to the database. </h1>
+        } else {
+            return <div className="form-div">
+                        <form>
+                            <label>
+                                <select className="dropdown" onChange={this.changeDevice} value={this.state.device}>
+                                    {this.state.devices.map((device) => {
+                                        return <option value={device.device_id}>Device {device.device_id} </option>
+                                    })}
+                                </select>
+                            </label>
+                            <label>Start Date: </label>
+                            <DatePicker
+                                selected={this.state.startDate}
+                                onChange={this.changeStartDate}
+                                todayButton="Go to today"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={10}
+                                timeCaption="time"
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                            />
+                            <label>End Date: </label>
+                            <DatePicker
+                                selected={this.state.endDate}
+                                onChange={this.changeEndDate}
+                                todayButton="Go to today"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={10}
+                                timeCaption="time"
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                            />
+
+                            <Button
+                                as="input" type="button" variant="outline-primary"
+                                onClick={this.handleSubmit}
+                                value="Update"
+                                size="sm"
+                                readOnly
+                            />
+
+                        </form>
+                        {this.showLatestReadings()}
+                        {this.showGraphs()}
+                    </div>
+        }
+    }
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
         return (
             <div>
                 <Header />
-                <div className="form-div">
-                    <form>
-                        <label>
-                            <select className="dropdown" onChange={this.changeDevice} value={this.state.device}>
-                                <option value="1">Device 1</option>
-                                <option value="2">Device 2</option>
-                                <option value="3">Device 3</option>
-                                <option value="4">Device 4</option>
-                                <option value="5">Device 5</option>
-                                <option value="6">Device 6</option>
-                                <option value="7">Device 7</option>
-                                <option value="8">Device 8</option>
-                            </select>
-                        </label>
-                        <label>Start Date: </label>
-                        <DatePicker
-                            selected={this.state.startDate}
-                            onChange={this.changeStartDate}
-                            todayButton="Go to today"
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeIntervals={10}
-                            timeCaption="time"
-                            dateFormat="MMMM d, yyyy h:mm aa"
-                        />
-                        <label>End Date: </label>
-                        <DatePicker
-                            selected={this.state.endDate}
-                            onChange={this.changeEndDate}
-                            todayButton="Go to today"
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeIntervals={10}
-                            timeCaption="time"
-                            dateFormat="MMMM d, yyyy h:mm aa"
-                        />
-
-                        <Button
-                            as="input" type="button" variant="outline-primary"
-                            onClick={this.handleSubmit}
-                            value="Update"
-                            size="sm"
-                            readOnly
-                        />
-
-                    </form>
-                    {this.showLatestReadings()}
-                    {this.showGraphs()}
-                </div>
+                {this.showContents()}
             </div>
-        );
+        )
     }
 
 }
