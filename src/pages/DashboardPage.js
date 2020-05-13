@@ -21,7 +21,7 @@ class DashboardPage extends Component {
             lastReadings: {},
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            selectedDevice: 1,
+            selectedDevice: "1",
             showLineGraph: false,
             graphError: false,
             graphErrorMessage: "",
@@ -178,7 +178,7 @@ class DashboardPage extends Component {
     }
 
     showLatestReadings = () => {
-        let deviceData = this.state.devices.filter((device) => device.device_id === this.state.selectedDevice)
+        let deviceData = this.state.devices.filter((device) => device.device_id === parseInt(this.state.selectedDevice,10))
         if(!this.state.latestReadingsError) {
             return <LastReadings reading={this.state.lastReadings} deviceData={deviceData[0]}/>
         } else {
