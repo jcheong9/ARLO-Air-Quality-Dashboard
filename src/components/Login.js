@@ -30,7 +30,7 @@ class Login extends Component {
           }
         })
         .then((data) => {
-            console.log(data)
+            console.log("TOKEN: ", JSON.stringify(data))
             Cookies.set('token', data.token)
             return window.location.href = '/dashboard'; 
         })

@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
+import LastReadings from '../components/LastReadings'
 
 class DashboardPage extends Component {
 
@@ -16,32 +17,51 @@ class DashboardPage extends Component {
             tvocData: [],
             co2Data: [],
             humidityData:[],
-            //dataByDevice: [],
-            //Temperature: true,
-            //TVOC: true,
-            //CO2: true,
-            //Humidity: true,
+            lastReadings: {},
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            device: "1",
+            device: "2",
             showLineGraph: false,
-            error: false,
-            errorMessage: "",
+            graphError: false,
+            graphErrorMessage: "",
+            latestReadingsError: false,
+            latestReadingsErrorMessage: "",
             loading: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSubmit();
+        this.getlatest = this.getLatest.bind(this);
     }
 
+    getLatest(event) {
+        let tokenLocal = Cookies.get('token')
+        fetch(`http://localhost:5000/readings/device?id=${this.state.device}&token=${tokenLocal}`, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
+        })
 
+            .then(res => res.json())
+            .then((data) => {
+                console.log("DATA!!!")
+            
+                console.log(JSON.stringify(data, 1, null));
+                this.setState({
+                    lastReadings: data.records_data[0],
+                    latestReadingsError: false
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({latestReadingsError: true,
+                    latestReadingsErrorMessage: "Error fetching latest readings"})
+            });
+
+    }
     //SEND POST REQUEST
     handleSubmit(event) {
         this.setState({loading: true});
-        // alert("device_id: " + this.state.device + "\n" +
-        //     "Start_date: " + moment(this.state.startDate).format('YYYY-MM-DD HH:mm') + "\n" +
-        //     "End_date: " + moment(this.state.endDate).format('YYYY-MM-DD HH:mm'));
         let tokenLocal = Cookies.get('token')
         fetch(`http://localhost:5000/readings?token=${tokenLocal}`, {
             method: 'post',
@@ -60,29 +80,32 @@ class DashboardPage extends Component {
             .then(res => res.json())
             .then((data) => {
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
-                    // this.setState({ dataByDevice: data });
                     let tempData = data.records_test_data.map((x) => {
                         return {
                             device_id: x.device_id,
                             temp: x.temp,
+                            timestamp: x.timestamp
                         }
                     })
                     let humidityData = data.records_test_data.map((x) => {
                         return {
                             device_id: x.device_id,
-                            humidity: x.humidity
+                            humidity: x.humidity,
+                            timestamp: x.timestamp
                         }
                     })
                     let co2Data = data.records_test_data.map((x) => {
                         return {
                             device_id: x.device_id,
                             co2: x.co2,
+                            timestamp: x.timestamp
                         }
                     })
                     let tvocData = data.records_test_data.map((x) => {
                         return {
                             device_id: x.device_id,
-                            tvoc: x.tvoc
+                            tvoc: x.tvoc,
+                            timestamp: x.timestamp
                         }
                     })
                     this.setState({ 
@@ -91,24 +114,24 @@ class DashboardPage extends Component {
                         co2Data: { records_test_data: co2Data},
                         tvocData: { records_test_data: tvocData},
                         showLineGraph: true,
-                        error: false,
+                        graphError: false,
                         loading: false
                     });
                 } else {
                     this.setState({ 
-                        error: true,
-                        errorMessage: "No data for this time period",
+                        graphError: true,
+                        graphErrorMessage: "No data for this time period",
                         showLineGraph: false,
                         loading: false
                     });
                 }
-                console.log(JSON.stringify(data, 1, null));
+                this.getLatest();
             })
             .catch(err => {
                 console.log(err);
                 this.setState({ 
-                    error: true,
-                    errorMessage: "Error fetching data",
+                    graphError: true,
+                    graphErrorMessage: "Error fetching data",
                     showLineGraph: false
                 });
             })
@@ -116,22 +139,16 @@ class DashboardPage extends Component {
     }
 
     changeStartDate = (event) => {
-        this.setState({ startDate: event }, () => {
-            this.handleSubmit();
-        });
+        this.setState({ startDate: event });
     }
 
     changeEndDate = (event) => {
-        this.setState({ endDate: event }, () => {
-            this.handleSubmit();
-        });
+        this.setState({ endDate: event });
     }
 
 
     changeDevice = (event) => {
-        this.setState({ device: event.target.value }, () => {
-            this.handleSubmit();
-        })
+        this.setState({ device: event.target.value })
     }
 
     checkBoxChange(key, event) {
@@ -140,13 +157,16 @@ class DashboardPage extends Component {
         this.setState(newObj);
     }
 
-    // onclickReset = (event) => {
-    //     window.location.reload();
-    // }
-
+    showLatestReadings = () => {
+        if(!this.state.latestReadingsError) {
+            return <LastReadings data={this.state.lastReadings}/>
+        } else {
+            return <h4>No readings found</h4>
+        }
+    }
     showGraphs = () => {
-        if (this.state.error){
-            return <div> <h1>{this.state.errorMessage}</h1></div>
+        if (this.state.graphError){
+            return <div> <h1>{this.state.graphErrorMessage}</h1></div>
         } 
         if (this.state.loading) {
             return <h4> Loading...</h4>
@@ -166,18 +186,6 @@ class DashboardPage extends Component {
     }
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
-
-        // const cboxes = ["Temperature", "TVOC", "CO2", "Humidity"];
-        // const cboxItems = [];
-        // cboxes.forEach(item => cboxItems.push(
-        //     <Form.Check
-        //         type='checkbox'
-        //         label={item}
-        //         key={item}
-        //         checked={this.state[item]}
-        //         onChange={this.checkBoxChange.bind(this, item)}
-        //     />
-        // ))
         return (
             <div>
                 <Header />
@@ -217,21 +225,17 @@ class DashboardPage extends Component {
                             timeCaption="time"
                             dateFormat="MMMM d, yyyy h:mm aa"
                         />
-                        {/* <div className="checkbox-group">
-                            {cboxItems}
-                        </div> */}
 
-                        {/* <Button
+                        <Button
                             as="input" type="button" variant="outline-primary"
                             onClick={this.handleSubmit}
-                            value="Submit"
+                            value="Update"
                             size="sm"
                             readOnly
-                        /> */}
-
-                        {/* <Button as="input" type="button" variant="outline-secondary" onClick={this.onclickReset} value="Clear" size="sm" readOnly/> */}
+                        />
 
                     </form>
+                    {this.showLatestReadings()}
                     {this.showGraphs()}
                 </div>
             </div>
