@@ -21,7 +21,7 @@ class DashboardPage extends Component {
             lastReadings: {},
             startDate: new Date().setHours(new Date().getHours() - 12),
             endDate: new Date(),
-            device: 1,
+            selectedDevice: 1,
             showLineGraph: false,
             graphError: false,
             graphErrorMessage: "",
@@ -44,13 +44,12 @@ class DashboardPage extends Component {
             method: 'get',
             headers: { 'Content-Type': 'application/json' }
         })
-
             .then(res => res.json())
             .then((data) => {
                 this.setState({
                     devices: data.device_test_data,
                     deviceError: false,
-                    device: data.device_test_data[0].device_id
+                    selectedDevice: data.device_test_data[0].device_id
                 });
                 this.handleSubmit();
             })
@@ -61,7 +60,7 @@ class DashboardPage extends Component {
     }
     getLatest(event) {
         let tokenLocal = Cookies.get('token')
-        fetch(`http://localhost:5000/readings/device?id=${this.state.device}&token=${tokenLocal}`, {
+        fetch(`http://localhost:5000/readings/device?id=${this.state.selectedDevice}&token=${tokenLocal}`, {
             method: 'get',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -91,7 +90,7 @@ class DashboardPage extends Component {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "device_id": this.state.device,
+                "device_id": this.state.selectedDevice,
                 "Start_date": moment(this.state.startDate).format('YYYY-MM-DD HH:mm'),
                 "End_date": moment(this.state.endDate).format('YYYY-MM-DD HH:mm'),
                 "Temperature": true,
@@ -173,7 +172,7 @@ class DashboardPage extends Component {
 
 
     changeDevice = (event) => {
-        this.setState({ device: event.target.value })
+        this.setState({ selectedDevice: event.target.value })
     }
 
     checkBoxChange(key, event) {
@@ -183,8 +182,9 @@ class DashboardPage extends Component {
     }
 
     showLatestReadings = () => {
+        let deviceData = this.state.devices.filter((device) => device.device_id === this.state.selectedDevice)
         if(!this.state.latestReadingsError) {
-            return <LastReadings data={this.state.lastReadings}/>
+            return <LastReadings reading={this.state.lastReadings} deviceData={deviceData[0]}/>
         } else {
             return <h4>No readings found</h4>
         }
@@ -217,9 +217,9 @@ class DashboardPage extends Component {
             return <div className="form-div">
                         <form>
                             <label>
-                                <select className="dropdown" onChange={this.changeDevice} value={this.state.device}>
+                                <select className="dropdown" onChange={this.changeDevice} value={this.state.selectedDevice}>
                                     {this.state.devices.map((device) => {
-                                        return <option value={device.device_id}>Device {device.device_id} </option>
+                                        return <option value={device.device_id}>{device.device_name} </option>
                                     })}
                                 </select>
                             </label>
