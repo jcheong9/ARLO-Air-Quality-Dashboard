@@ -47,9 +47,9 @@ class DashboardPage extends Component {
             .then(res => res.json())
             .then((data) => {
                 this.setState({
-                    devices: data.device_test_data,
+                    devices: data.device_info_data,
                     deviceError: false,
-                    selectedDevice: data.device_test_data[0].device_id
+                    selectedDevice: data.device_info_data[0].device_id
                 });
                 this.handleSubmit();
             })
