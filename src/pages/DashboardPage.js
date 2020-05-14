@@ -40,7 +40,7 @@ class DashboardPage extends Component {
 
     getDevices() {
         let tokenLocal = Cookies.get('token')
-        fetch(`http://localhost:5000/devices?token=${tokenLocal}`, {
+        fetch(`http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/devices?token=${tokenLocal}`, {
             method: 'get',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -60,7 +60,7 @@ class DashboardPage extends Component {
     }
     getLatest(event) {
         let tokenLocal = Cookies.get('token')
-        fetch(`http://localhost:5000/readings/device?id=${this.state.selectedDevice}&token=${tokenLocal}`, {
+        fetch(`http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/readings/device?id=${this.state.selectedDevice}&token=${tokenLocal}`, {
             method: 'get',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -83,7 +83,7 @@ class DashboardPage extends Component {
     handleSubmit(event) {
         this.setState({loading: true});
         let tokenLocal = Cookies.get('token')
-        fetch(`http://localhost:5000/readings?token=${tokenLocal}`, {
+        fetch(`http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/readings?token=${tokenLocal}`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
