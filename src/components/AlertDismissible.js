@@ -13,15 +13,16 @@ class AlertDismissible extends Component{
       
       handleDismiss() {
         this.setState({ show: false });
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       }
       getAlert() {
        this.setState({ show: true})   
     }
 
     render(){
-        if (this.props.show) {
+        if (this.state.show) {
           return (
-            <Alert variant="danger" onDismiss={this.handleDismiss} dismissible>
+            <Alert variant="danger" onClose={this.handleDismiss} dismissible>
               <Alert.Heading>Invalid Token!</Alert.Heading>
               <p>
               Please Login Again.
