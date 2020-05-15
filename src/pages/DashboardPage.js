@@ -44,7 +44,8 @@ class DashboardPage extends Component {
 
     getDevices() {
         let tokenLocal = Cookies.get('token')
-        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/devices', {
+        fetch('http://127.0.0.1:5000/devices', {
+        // fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/devices', {
             method: 'post',
             headers: {'Authorization': 'bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtHQTFLZGVQbHpnQUlzZmpuWUZKOCJ9.eyJpc3MiOiJodHRwczovL2FybG8tYXEtYXBpLmF1dGgwLmNvbS8iLCJzdWIiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbUBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9BUkxPLUFRL2FwaSIsImlhdCI6MTU4OTQ4NzYyMSwiZXhwIjoxNTkyMDc5NjIxLCJhenAiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.sOao5ajzFe1WNJr_Gqa4FEuemhL7iTnMCj9aAwiKt9SePqRJD7p6AkrYchGHDi30WYU7f-rLHbOGC0M8l0hbrFddY-7OKazLLaOxtMMEFM2Ag10a5iA5UIc7Uc_LFVfjDKkwz6EKSjg3tii6PH-W-wgsndWLZ1Nu4qeNtCH0YkqJKCz7U_tec6M0KSVMTgtQ3_TH3TDv5x-oePGgTtB8l0Z2saRdcQiRcIehzhNlgquyJmdx6DijYzx_49uBHahn86AUXO3gQlZquDR2tQS6IIrXTXWjoE-mlpH9YzTFSrE-RWfHLPA4jt0YT7_QT5w_7vj1nuX5zfpFl3_CqVL2DQ'}
         })
