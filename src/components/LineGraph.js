@@ -1,3 +1,4 @@
+
 import React from 'react'
 import moment from 'moment'
 import ReactFrappeChart from "react-frappe-charts";
@@ -14,7 +15,7 @@ const LineGraph = ({ data }) => {
     }
 
     for (let s = 0; s < st.length; s++) {
-        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD');
+        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD HH:mm');
         timeArr.push(convertDate);
     }
     if (dataArr.length !== 0) {
@@ -41,12 +42,21 @@ const LineGraph = ({ data }) => {
         <div className="charts">
             <ReactFrappeChart
                 type="line"
+                lineOptions={{hideDots: 1}}
                 colors={["#21ba45"]}
                 axisOptions={{ xAxisMode: "tick", yAxisMode: "tick", xIsSeries: 1 }}
                 height={250}
+                y_axis_exp_based_on_range={true}
                 data={{
                     labels: timeArr.length !== 0 ? timeArr : ["Error"],
-                    datasets: datasetsArr
+                    datasets: datasetsArr,
+                    // yMarkers: [
+                    //     {
+                    //         label: '',
+                    //         value: 0,
+                    //         type: 'solid'
+                    //     }
+                    // ]
                 }}
             />
         </div>
