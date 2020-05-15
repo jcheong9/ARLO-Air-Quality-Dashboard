@@ -11,10 +11,32 @@ const SignUpPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setErrorMsg("");
-        if(password !== confirmPassword) {
-            setErrorMsg("Passwords do not match");
-        } 
+
+        if(password !== confirmPassword){
+            alert("Passwords do not match");
+            return;
+        }
+        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/signup', {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
+            body: JSON.stringify({
+                "first_name": firstName,
+                "last_name": lastName,
+                "email": email,
+                "password": password
+            })
+        })
+        .then(res => {
+          if(res.status === 409){
+            alert("Email is already registered to a user")
+            return;
+          }
+          if(res.status === 200){
+            return window.location.href = '/dashboard'; 
+          }
+        })
+        .catch((error) => console.log(error))
     }
     return (
         <div>
