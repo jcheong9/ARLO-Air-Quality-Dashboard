@@ -16,7 +16,7 @@ const SignUpPage = () => {
             alert("Passwords do not match");
             return;
         }
-        fetch('http://127.0.0.1:5000/signup', {
+        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/signup', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',

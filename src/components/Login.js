@@ -13,8 +13,7 @@ class Login extends Component {
     }
     handleSubmit(event){
         event.preventDefault();
-        fetch('http://127.0.0.1:5000/login', {
-        // fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/login', {
+        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/login', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',
@@ -29,12 +28,8 @@ class Login extends Component {
             return
           }
           if(res.status === 200){
-            //return res.json();
-          }
-        })
-        .then((data) => {
-            //Cookies.set('token', data.token)
             return window.location.href = '/dashboard'; 
+          }
         })
         .catch((error) => {
           return window.location.href = '/';
