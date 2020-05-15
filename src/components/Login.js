@@ -24,13 +24,14 @@ class Login extends Component {
         .then(res => {
           if(res.status === 401){
             alert("Wrong password!");
+            return
           }
           if(res.status === 200){
-            return res.json();
+            //return res.json();
           }
         })
         .then((data) => {
-            Cookies.set('token', data.token)
+            //Cookies.set('token', data.token)
             return window.location.href = '/dashboard'; 
         })
         .catch((error) => console.log(error))
