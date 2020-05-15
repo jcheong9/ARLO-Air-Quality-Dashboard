@@ -23,7 +23,7 @@ class AlertDismissible extends Component{
         if (this.state.show) {
           return (
             <Alert variant="danger" onClose={this.handleDismiss} dismissible>
-              <Alert.Heading>Invalid Token!</Alert.Heading>
+              <Alert.Heading>Token Expired!</Alert.Heading>
               <p>
               Please Login Again.
               </p>
