@@ -7,6 +7,7 @@ import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
 import LastReadings from '../components/LastReadings'
+import  { Redirect } from 'react-router-dom'
 
 class DashboardPage extends Component {
 
@@ -28,7 +29,9 @@ class DashboardPage extends Component {
             latestReadingsError: false,
             latestReadingsErrorMessage: "",
             deviceError: false,
-            loading: false
+            loading: false,
+            isSubmitted: false,
+            fetchError: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -41,7 +44,7 @@ class DashboardPage extends Component {
 
     getDevices() {
         let tokenLocal = Cookies.get('token')
-        fetch('http://localhost:5000/devices', {
+        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/devices', {
             method: 'post',
             headers: {'Authorization': 'bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtHQTFLZGVQbHpnQUlzZmpuWUZKOCJ9.eyJpc3MiOiJodHRwczovL2FybG8tYXEtYXBpLmF1dGgwLmNvbS8iLCJzdWIiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbUBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9BUkxPLUFRL2FwaSIsImlhdCI6MTU4OTQ4NzYyMSwiZXhwIjoxNTkyMDc5NjIxLCJhenAiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.sOao5ajzFe1WNJr_Gqa4FEuemhL7iTnMCj9aAwiKt9SePqRJD7p6AkrYchGHDi30WYU7f-rLHbOGC0M8l0hbrFddY-7OKazLLaOxtMMEFM2Ag10a5iA5UIc7Uc_LFVfjDKkwz6EKSjg3tii6PH-W-wgsndWLZ1Nu4qeNtCH0YkqJKCz7U_tec6M0KSVMTgtQ3_TH3TDv5x-oePGgTtB8l0Z2saRdcQiRcIehzhNlgquyJmdx6DijYzx_49uBHahn86AUXO3gQlZquDR2tQS6IIrXTXWjoE-mlpH9YzTFSrE-RWfHLPA4jt0YT7_QT5w_7vj1nuX5zfpFl3_CqVL2DQ'}
         })
@@ -61,17 +64,12 @@ class DashboardPage extends Component {
     }
     getLatest(event) {
         let tokenLocal = Cookies.get('token')
-        fetch('http://localhost:5000/readings/device', {
+        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/readings/device', {
             method: 'post',
             headers: {  'Content-Type': 'application/json',
                         'Authorization': 'bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtHQTFLZGVQbHpnQUlzZmpuWUZKOCJ9.eyJpc3MiOiJodHRwczovL2FybG8tYXEtYXBpLmF1dGgwLmNvbS8iLCJzdWIiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbUBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9BUkxPLUFRL2FwaSIsImlhdCI6MTU4OTQ4NzYyMSwiZXhwIjoxNTkyMDc5NjIxLCJhenAiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.sOao5ajzFe1WNJr_Gqa4FEuemhL7iTnMCj9aAwiKt9SePqRJD7p6AkrYchGHDi30WYU7f-rLHbOGC0M8l0hbrFddY-7OKazLLaOxtMMEFM2Ag10a5iA5UIc7Uc_LFVfjDKkwz6EKSjg3tii6PH-W-wgsndWLZ1Nu4qeNtCH0YkqJKCz7U_tec6M0KSVMTgtQ3_TH3TDv5x-oePGgTtB8l0Z2saRdcQiRcIehzhNlgquyJmdx6DijYzx_49uBHahn86AUXO3gQlZquDR2tQS6IIrXTXWjoE-mlpH9YzTFSrE-RWfHLPA4jt0YT7_QT5w_7vj1nuX5zfpFl3_CqVL2DQ'},
             body: JSON.stringify({'id':`${this.state.selectedDevice}`})
         })
-        // fetch(`http://localhost:5000/readings/device?id=${this.state.selectedDevice}&token=${tokenLocal}`, {
-        //     method: 'get',
-        //     headers: { 'Content-Type': 'application/json' }
-        // })
-
             .then(res => res.json())
             .then((data) => {
                 this.setState({
@@ -90,9 +88,7 @@ class DashboardPage extends Component {
     handleSubmit(event) {
         this.setState({loading: true});
         let tokenLocal = Cookies.get('token')
-
-        
-        fetch(`http://localhost:5000/readings`, {
+        fetch(`http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/readings`, {
             method: 'post',
             headers: {  'Content-Type': 'application/json',
                         'Authorization': 'bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImtHQTFLZGVQbHpnQUlzZmpuWUZKOCJ9.eyJpc3MiOiJodHRwczovL2FybG8tYXEtYXBpLmF1dGgwLmNvbS8iLCJzdWIiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbUBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9BUkxPLUFRL2FwaSIsImlhdCI6MTU4OTQ4NzYyMSwiZXhwIjoxNTkyMDc5NjIxLCJhenAiOiJpNkdzejR3elQ0WUtPelNIRmRmUXBhT0ZJUHB4bjRRbSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.sOao5ajzFe1WNJr_Gqa4FEuemhL7iTnMCj9aAwiKt9SePqRJD7p6AkrYchGHDi30WYU7f-rLHbOGC0M8l0hbrFddY-7OKazLLaOxtMMEFM2Ag10a5iA5UIc7Uc_LFVfjDKkwz6EKSjg3tii6PH-W-wgsndWLZ1Nu4qeNtCH0YkqJKCz7U_tec6M0KSVMTgtQ3_TH3TDv5x-oePGgTtB8l0Z2saRdcQiRcIehzhNlgquyJmdx6DijYzx_49uBHahn86AUXO3gQlZquDR2tQS6IIrXTXWjoE-mlpH9YzTFSrE-RWfHLPA4jt0YT7_QT5w_7vj1nuX5zfpFl3_CqVL2DQ'},
@@ -106,7 +102,6 @@ class DashboardPage extends Component {
                 "Humidity": true
             })
         })
-
             .then(res => res.json())
             .then((data) => {
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
@@ -162,7 +157,8 @@ class DashboardPage extends Component {
                 this.setState({ 
                     graphError: true,
                     graphErrorMessage: "Error fetching data",
-                    showLineGraph: false
+                    showLineGraph: false,
+                    fetchError: true
                 });
             })
 
@@ -268,6 +264,15 @@ class DashboardPage extends Component {
     }
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
+
+        if(this.state.fetchError){
+            return <Redirect to={{
+                pathname: '/',
+                state: { stateAlertError: true }
+            }}
+            />
+        }
+
         return (
             <div>
                 <Header />
