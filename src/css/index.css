@@ -88,3 +88,13 @@ body {
 .form_input {
   width: 100%;
 }
+
+.online {
+  color: rgb(169,169,169);
+}
+
+
+.offline {
+  color: rgb(128, 255, 99);
+
+}
