@@ -8,6 +8,7 @@ const SignUpPage = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+    const [studentNo, setStudentNo] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -24,6 +25,7 @@ const SignUpPage = () => {
                 "first_name": firstName,
                 "last_name": lastName,
                 "email": email,
+                "student_number": studentNo,
                 "password": password
             })
         })
@@ -52,6 +54,8 @@ const SignUpPage = () => {
                         <input className="form_input" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
                         <label className="form_label" htmlFor="name">Email</label>
                         <input className="form_input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                        <label className="form_label" htmlFor="name">BCIT Student Number</label>
+                        <input className="form_input" type="email" value={studentNo} onChange={(e) => setStudentNo(e.target.value)} required/>
                         <label className="form_label" htmlFor="name">Password</label>
                         <input className="form_input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                         <label className="form_label" htmlFor="name">Confirm Password</label>
