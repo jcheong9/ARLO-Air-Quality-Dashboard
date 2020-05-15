@@ -7,6 +7,7 @@ import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
 import LastReadings from '../components/LastReadings'
+import  { Redirect } from 'react-router-dom'
 
 class DashboardPage extends Component {
 
@@ -28,7 +29,9 @@ class DashboardPage extends Component {
             latestReadingsError: false,
             latestReadingsErrorMessage: "",
             deviceError: false,
-            loading: false
+            loading: false,
+            isSubmitted: false,
+            fetchError: false
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -96,7 +99,6 @@ class DashboardPage extends Component {
                 "Humidity": true
             })
         })
-
             .then(res => res.json())
             .then((data) => {
                 if (data && data.records_test_data && data.records_test_data.length > 0) {
@@ -152,7 +154,8 @@ class DashboardPage extends Component {
                 this.setState({ 
                     graphError: true,
                     graphErrorMessage: "Error fetching data",
-                    showLineGraph: false
+                    showLineGraph: false,
+                    fetchError: true
                 });
             })
 
@@ -258,6 +261,15 @@ class DashboardPage extends Component {
     }
     //TODO: fetch selection of devices from db somehow, instead of hard coding it to 1~8 here.
     render() {
+
+        if(this.state.fetchError){
+            return <Redirect to={{
+                pathname: '/',
+                state: { stateAlertError: true }
+            }}
+            />
+        }
+
         return (
             <div>
                 <Header />
