@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
+import Cookies from 'js-cookie';
 
 const SignUpPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -33,6 +34,7 @@ const SignUpPage = () => {
             return;
           }
           if(res.status === 200){
+            Cookies.set('user', this.username.current.value)
             return window.location.href = '/dashboard'; 
           }
         })

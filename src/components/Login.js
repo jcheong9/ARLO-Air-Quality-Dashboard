@@ -28,6 +28,7 @@ class Login extends Component {
             return
           }
           if(res.status === 200){
+            Cookies.set('user', this.username.current.value)
             return window.location.href = '/dashboard'; 
           }
         })

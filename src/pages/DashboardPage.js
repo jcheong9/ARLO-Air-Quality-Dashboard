@@ -88,6 +88,7 @@ class DashboardPage extends Component {
     handleSubmit(event) {
         this.setState({loading: true});
         let tokenLocal = Cookies.get('token')
+        let temp = moment(this.state.startDate).format('YYYY-MM-DD HH:mm')
         fetch(`http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/readings`, {
             method: 'post',
             headers: {  'Content-Type': 'application/json',

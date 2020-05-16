@@ -44,6 +44,7 @@ body {
 
 .btn {
   margin: 20px 0;
+  margin-right: 10px;
 }
 .react-datepicker-wrapper{
   margin: 10px;
@@ -87,4 +88,8 @@ body {
 
 .form_input {
   width: 100%;
+}
+
+.profile_token_text{
+  width: 100%
 }
