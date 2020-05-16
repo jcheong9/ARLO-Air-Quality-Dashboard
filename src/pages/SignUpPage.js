@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
+import config from '../config';
 
 const SignUpPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -17,7 +18,7 @@ const SignUpPage = () => {
             alert("Passwords do not match");
             return;
         }
-        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/signup', {
+        fetch(`${config.API_ADDRESS}/signup`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',
