@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
+<<<<<<< HEAD
 import Cookies from 'js-cookie';
+=======
+import config from '../config';
+>>>>>>> d94bd66e62263b9f57b59654e6f6093652b1b189
 
 const SignUpPage = () => {
     const [firstName, setFirstName] = useState("");
@@ -9,6 +13,7 @@ const SignUpPage = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+    const [studentNo, setStudentNo] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -17,7 +22,7 @@ const SignUpPage = () => {
             alert("Passwords do not match");
             return;
         }
-        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/signup', {
+        fetch(`${config.API_ADDRESS}/signup`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',
@@ -25,6 +30,7 @@ const SignUpPage = () => {
                 "first_name": firstName,
                 "last_name": lastName,
                 "email": email,
+                "student_number": studentNo,
                 "password": password
             })
         })
@@ -54,6 +60,8 @@ const SignUpPage = () => {
                         <input className="form_input" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required/>
                         <label className="form_label" htmlFor="name">Email</label>
                         <input className="form_input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                        <label className="form_label" htmlFor="name">BCIT Student Number</label>
+                        <input className="form_input" type="email" value={studentNo} onChange={(e) => setStudentNo(e.target.value)} required/>
                         <label className="form_label" htmlFor="name">Password</label>
                         <input className="form_input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                         <label className="form_label" htmlFor="name">Confirm Password</label>

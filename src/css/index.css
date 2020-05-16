@@ -93,3 +93,12 @@ body {
 .profile_token_text{
   width: 100%
 }
+.online {
+  color: rgb(169,169,169);
+}
+
+
+.offline {
+  color: rgb(128, 255, 99);
+
+}
