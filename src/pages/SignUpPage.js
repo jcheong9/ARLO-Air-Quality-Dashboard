@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
-<<<<<<< HEAD
 import Cookies from 'js-cookie';
-=======
 import config from '../config';
->>>>>>> d94bd66e62263b9f57b59654e6f6093652b1b189
 
 const SignUpPage = () => {
     const [firstName, setFirstName] = useState("");
