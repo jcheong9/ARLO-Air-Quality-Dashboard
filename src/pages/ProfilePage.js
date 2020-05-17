@@ -17,7 +17,7 @@ const ProfilePage = () => {
         document.execCommand("copy");
     }
     const getProfile = () => {
-        fetch('http://127.0.0.1:5000/profile', {
+        fetch('http://ec2-34-216-137-71.us-west-2.compute.amazonaws.com:5000/profile', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         mode: 'cors',
