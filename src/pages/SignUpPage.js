@@ -37,7 +37,7 @@ const SignUpPage = () => {
             return;
           }
           if(res.status === 200){
-            Cookies.set('user', this.username.current.value)
+            Cookies.set('user', email)
             return window.location.href = '/dashboard'; 
           }
         })
