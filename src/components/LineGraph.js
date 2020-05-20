@@ -15,8 +15,10 @@ const LineGraph = ({ data }) => {
     }
 
     for (let s = 0; s < st.length; s++) {
-        let convertDate = moment(dataArr[s].timestamp).format('YYYY/MM/DD HH:mm');
-        timeArr.push(convertDate);
+        let newDate = dataArr[s].timestamp;
+        let lastIndex = newDate.lastIndexOf(" ");
+        newDate = newDate.substring(0, lastIndex);
+        timeArr.push(newDate);
     }
     if (dataArr.length !== 0) {
         let keys = Object.keys(dataArr[0]);
@@ -33,8 +35,6 @@ const LineGraph = ({ data }) => {
                 }
                 datasetsArr[i].values = tmpArr;
             }
-
-        console.log(datasetsArr);
     }
 
     //TODO: handle error when return data is null or only 1 record
