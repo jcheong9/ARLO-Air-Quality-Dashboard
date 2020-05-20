@@ -7,7 +7,7 @@ import moment from 'moment';
 import Button from 'react-bootstrap/Button';
 import Cookies from 'js-cookie';
 import LastReadings from '../components/LastReadings'
-import  { Redirect } from 'react-router-dom'
+import  { Redirect, Link } from 'react-router-dom'
 import config from '../config'
 
 class DashboardPage extends Component {
@@ -219,6 +219,7 @@ class DashboardPage extends Component {
             return <h1 className="mt-5 text-center"> Sorry, there was an error connecting to the database. </h1>
         } else {
             return <div className="form-div">
+                <button  className="btn btn-outline-primary float-right text-light"><Link to="/profile">Profile</Link></button> 
                         <form>
                             <label>
                                 <select className="dropdown" onChange={this.changeDevice} value={this.state.selectedDevice}>
