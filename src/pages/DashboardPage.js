@@ -224,7 +224,7 @@ class DashboardPage extends Component {
                             <label>
                                 <select className="dropdown" onChange={this.changeDevice} value={this.state.selectedDevice}>
                                     {this.state.devices.map((device) => {
-                                        return <option value={device.device_id}>{device.device_name} </option>
+                                        return <option key={device.device_id} value={device.device_id}>{device.device_name} </option>
                                     })}
                                 </select>
                             </label>
