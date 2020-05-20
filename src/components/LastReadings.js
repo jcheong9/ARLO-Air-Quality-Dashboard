@@ -1,6 +1,14 @@
 import React from 'react';
 import moment from 'moment';
 
+const lastTaken = (timestamp) => {
+    const yesterday = new Date().setHours(new Date().getHours() - 24);
+    if (timestamp < yesterday) {
+        return <p className="text-danger">Taken on {moment(timestamp).format('dddd, MMMM Do YYYY, h:mma')} PDT </p>
+    } else {
+        return <p>Taken on {moment(timestamp).format('dddd, MMMM Do YYYY, h:mma')} PDT </p>
+    }
+}
 const LastReadings = (props) => {
     const {timestamp, co2, temp, humidity, tvoc} = props.reading;
 
@@ -14,7 +22,7 @@ const LastReadings = (props) => {
                     {props.deviceData && props.deviceData.active ? ' Active' : ' Deactivated'} 
                 </span>
             </p>
-            <p>Taken on {moment(timestamp).format('dddd, MMMM Do YYYY, h:mma')} PDT </p>
+            {lastTaken()}
             <div className="d-flex flex-row border">
                 <div className="text-center border-right w-25">
                     <h5>{tvoc}</h5>
